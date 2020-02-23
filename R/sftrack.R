@@ -18,16 +18,193 @@
 #' @import sf
 #' @export new_sftrack
 #' @examples
+data(raccoon_data)
+
+## sf/data.frame
+rac_sfdf <- st_as_sf(raccoon_data, coords = c("longitude", "latitude", "height"), crs = 4326)
+rac_sfdf$t <- as.POSIXct(rac_sfdf$acquisition_time, tz = "UTC")
+rac_sfdf_track <- sftrack(data = rac_sfdf, burst = "sensor_code")
+str(rac_sfdf_track)
+
+## data.frame
+rac_df <- raccoon_data
+rac_df$t <- as.POSIXct(rac_df$acquisition_time, tz = "UTC")
+rac_df_track <- sftrack(data = rac_df, coords = c("longitude", "latitude", "height"), burst = "sensor_code", crs = 4326)
+str(rac_df_track)
+
+## sf + vectors
+rac_sf_vec_track <- sftrack(coords = rac_sfdf$geometry, timestamp = rac_sfdf$t, burst = rac_sfdf$sensor_code)
+str(rac_sf_vec_track)
+
+## data.frame of coordinates + vectors
+rac_df_vec_track <- sftrack(coords = rac_df[, c("longitude", "latitude", "height")], timestamp = rac_df$t, burst = rac_df$sensor_code)
+rac_df_vec_track2 <- sftrack(data = NULL, rac_df[, c("longitude", "latitude", "height")], rac_df$t, rac_df$sensor_code)
+str(rac_df_vec_track)
+all.equal(rac_df_vec_track, rac_df_vec_track2)
+
+## sftrack itself
+class(rac_sfdf_track)
+names(rac_sfdf_track)
+sft2 <- sftrack(rac_sfdf_track, burst = "sensor_code")
+str(sft2)
+all.equal(sft2, rac_sfdf_track)
+
+sftrack <- function(data = NULL, coords, timestamp, burst, error = NULL, crs) {
+
+    ## 1) 'data' inherits from 'sf' (and 'coords', 'timestamp', 'burst',
+    ## 'error' are character) ✓
+    ##
+    ## 1.a) which means that if applied to an existing 'sftrack', it
+    ## simply "cleans" it. ✓
+    ##
+    ## 1.b) 'data' inherits from 'sftraj' (conversion back to
+    ## 'sftrack')
+    ##
+    ## 2) 'coords' inherits from sfc (and 'timestamp' is POSIXt, burst
+    ## is vector, and error is?) ✓
+    ##
+    ## 3) 'data' inherits from data.frame (and 'coords', 'timestamp',
+    ## 'burst', 'error' are character) ✓
+    ##
+    ## 4) 'coords' is data.frame , 'timestamp' is POSIXt, burst is
+    ## vector, and error is? ✓
+    ##
+    ## 5) 'data' comes from other packages (ltraj, move, etc.)
+
+    ## If <data> provided ('sf/data.frame' or 'data.frame')
+    if (!is.null(data)) {
+        ## Set defaults and POSIXt check
+        ## <timestamp> is '"t"' if missing
+        if (missing(timestamp))
+            timestamp <- "t"
+        ## <burst> is '"id"' if missing
+        if (missing(burst))
+            burst <- "id"
+        ## $timestamp must be a POSIXt
+        if (!inherits(data[[timestamp]], "POSIXt"))
+            stop("The '\"timestamp\"' column must be a 'POSIXt'.")
+        ## Check that the arguments <timestamp>, <burst>, <error> are
+        ## actual columns from <data>
+        arg_names <- c(timestamp, burst, error)
+        if (!all(arg_names %in% names(data)))
+            stop(paste0("\"", paste0(arg_names[which(!(arg_names %in% names(data)))], collapse = "\", \""), "\" need to be column(s) of 'data'"))
+        ## If it is a 'sf/data.frame', set defaults, and check that it
+        ## contains a <sfc_POINT>
+        if (inherits(data, "sf")) {
+            ## <coords> is '"geometry"' if missing
+            if (missing(coords))
+                coords <- "geometry"
+            ## Check that <coords> is an actual column of <data>
+            if (!(coords %in% names(data)))
+                stop(paste0(coords, " needs to be a column of 'data'"))
+            if (!inherits(data[[coords]], "sfc_POINT"))
+                stop("'sf' column must be of class \"sfc_POINT\".")
+        }
+        ## Otherwise make sure that it is a 'data.frame', set
+        ## defaults, and convert the DF to 'sf'
+        else {
+            ## Check that it is nevertheless a 'data.frame'
+            if (!inherits(data, "data.frame"))
+                stop("Data format not accepted. Check the documentation")
+            ## <coords> is 'c("x", "y", "z")' if missing
+            if (missing(coords))
+                coords <- c("x", "y", "z")
+            ## Check that <coord> is an actual column of <data>
+            if (!all(coords %in% names(data)))
+                stop(paste0("\"", paste0(coords[which(!(coords %in% names(data)))], collapse = "\", \""), "\" need to be column(s) of 'data'"))
+            ## Create the "geometry" column (needs to handle cases
+            ## where $geometry already exists)
+            if (missing(crs)) {
+                crs <- 4326
+                warning("No CRS provided. Assuming 'longlat' by default (EPSG:4326).")
+            }
+            ## Note that 'dim' is automatically "XY" if only
+            ## two dimensions, and "XYZ" if three dimensions
+            ## (not necessary to specify)
+            data <- sf::st_as_sf(data, coords = coords, remove = FALSE, na.fail = FALSE, crs = crs)
+        }
+    }
+    ## If <data> is not NULL, vector mode. <coords> can be either a
+    ## <data.frame> with two or three columns (coordinates) or a
+    ## <sfc_POINT> column
+    else {
+        ## <data.frame> of coordinates
+        if (inherits(coords, "data.frame")) {
+            ## <timestamp> must be a POSIXt of length nrow(<coords>)
+            if (!(inherits(timestamp, "POSIXt") & length(timestamp) == nrow(coords)))
+                stop("With vector inputs, 'timestamp' must be a 'POSIXt' with a length equal to the number of rows of 'coords'.")
+            ## <burst> must be a vector of length nrow(<coords>)
+            if (length(burst) != nrow(coords))
+                stop("With vector inputs, 'burst' must be a vector with a length equal to the number of rows of 'coords'.")
+            ## <error> must be a vector of length nrow(<coords>)
+            if (!is.null(error))
+                if (length(error) != nrow(coords))
+                    stop("With vector inputs, 'error' must be a vector with a length equal to the number of rows of 'coords'.")
+            if (!(ncol(coords) %in% 2:3))
+                stop("A <data.frame> of spatial coordinates must have 2 or 3 dimensions.")
+            data <- sf::st_as_sf(data.frame(coords, t = timestamp, burst = burst), coords = names(coords), remove = FALSE, na.fail = FALSE, crs = crs)
+        }
+        else if (inherits(coords, "sfc_POINT")) {
+            ## <timestamp> must be a POSIXt of length n
+            if (!(inherits(timestamp, "POSIXt") & length(timestamp) == length(coords)))
+                stop("With vector inputs, 'timestamp' must be a 'POSIXt' with the same length as 'coords'.")
+            ## <burst> must be a vector of length n
+            if (length(burst) != length(coords))
+                stop("With vector inputs, 'burst' must be a vector with the same length as 'coords'.")
+            ## <error> must be a vector of length n
+            if (!is.null(error))
+                if (length(error) != length(coords))
+                    stop("With vector inputs, 'error' must be a vector with the same length as 'coords'.")
+            data <- data.frame(geometry = coords, t = timestamp, burst = burst)
+        }
+        else
+            stop("Data format not accepted. Check the documentation")
+        ## Add the error term if it exists
+        if (!is.null(error))
+            data[["error"]] <- error
+        ## And we set the variables names for timestamp, burst, and
+        ## error in the function environment
+        timestamp <- "t"
+        burst <- "burst"
+        error <- "error"
+    }
+
+    ## Remove duplicates (burst×timestamp)
+    # data <- remove_time_dup(data)
+
+    ## Order data by (burst×timestamp)
+    # data <- order_traj(data)
+
+    ## Build 'sftrack' object
+    new_sftrack(data = data, burst = burst, timestamp = timestamp, error = error)
+}
+
+new_sftrack <- function(data, burst, timestamp, error) {
+    ## Prepare burst column
+    # data <- make_burst(data)
+
+    ## Does <data> inherits from '"tbl"'?
+    if (inherits(data, "tbl"))
+        tbl <- c("tbl_df", "tbl")
+    else tbl <- NULL
+
+    structure(data,
+        burst = burst,
+        timestamp = timestamp,
+        error = error,
+        class = c("sftrack", "sf", tbl, "data.frame")
+    )
+}
+
+
+
 #'  data(raccoon_data)
 #'  burstz <- list( id = raccoon_data$sensor_code,month = as.POSIXlt(raccoon_data$utc_date)$mon, height =as.numeric(raccoon_data$height>5))
 #' my_track <- new_sftrack(raccoon_data, time =as.POSIXct(raccoon_data$acquisition_time),
 #'   error = NA, coords = c('longitude','latitude','height'), tz = 'UTC',
 #'   burst =burstz)
-######################
-# Builder
-#
 
-new_sftrack<-
+new_sftrack.ori <-
   function(data = data.frame(),
     proj4 = NA,
     time = NA,
