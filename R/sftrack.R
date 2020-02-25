@@ -169,11 +169,14 @@ sftrack <- function(data = NULL, coords, timestamp, burst, error = NULL, crs) {
         error <- "error"
     }
 
-    ## Remove duplicates (burst×timestamp)
-    # data <- remove_time_dup(data)
+    ## Remove NAs in timestamps (and keep them as "timestamp_NA" attribute with global option "sftraj_keep")
+    #data <- remove_time_na(data)
 
-    ## Order data by (burst×timestamp)
-    # data <- order_traj(data)
+    ## Remove duplicates (burst×timestamp) (and keep them as "burst_dup" with global option "sftraj_keep")
+    #data <- remove_time_dup(data)
+
+    ## Order data by (burst×timestamp and keep original order as "row_ori_order" with global option "sftraj_keep")
+    #data <- order_traj(data)
 
     ## Build 'sftrack' object
     new_sftrack(data = data, burst = burst, timestamp = timestamp, error = error)
@@ -194,6 +197,20 @@ new_sftrack <- function(data, burst, timestamp, error) {
         error = error,
         class = c("sftrack", "sf", tbl, "data.frame")
     )
+}
+
+sftrack_sanity <- function(sftrack) {
+    ## Remove NAs in timestamps (and keep them as "timestamp_NA" attribute with global option "sftraj_keep")
+    #data <- remove_time_na(data)
+
+    ## Remove duplicates (burst×timestamp) (and keep them as "burst_dup" with global option "sftraj_keep")
+    #data <- remove_time_dup(data)
+
+    ## Order data by (burst×timestamp and keep original order as "row_ori_order" with global option "sftraj_keep")
+    #data <- order_traj(data)
+
+    ## Build 'sftrack' object
+    new_sftrack(data = data, burst = burst, timestamp = timestamp, error = error)
 }
 
 
