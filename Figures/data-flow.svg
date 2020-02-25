@@ -16,7 +16,7 @@
    id="svg8"
    sodipodi:docname="data-flow.svg"
    inkscape:version="0.92.1 r15371"
-   inkscape:export-filename="/home/mathieu/.R-site/packages/sftraj/Figures/data-flow.png"
+   inkscape:export-filename="/home/mathieu/.R-site/packages/sftraj/Figures/data-flow-2-df.png"
    inkscape:export-xdpi="78.195915"
    inkscape:export-ydpi="78.195915">
   <sodipodi:namedview
@@ -27,10 +27,10 @@
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:zoom="0.97278633"
-     inkscape:cx="613.75177"
+     inkscape:cx="303.81732"
      inkscape:cy="707.76077"
      inkscape:document-units="mm"
-     inkscape:current-layer="g17170"
+     inkscape:current-layer="g11373"
      showgrid="false"
      fit-margin-top="5"
      fit-margin-left="5"
@@ -38,6 +38,21 @@
      fit-margin-bottom="5" />
   <defs
      id="defs2">
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5319"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5317"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
     <marker
        inkscape:stockid="Arrow1Lend"
        orient="auto"
@@ -859,7 +874,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1085,24 +1100,6 @@
          x="227.33316"
          sodipodi:role="line">(other levels optional)</tspan></text>
     <path
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker19006)"
-       d="m 124.29196,148.78034 v 18.24114 h -21.83888 v 18.24114"
-       id="path17004"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccc" />
-    <path
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker18606)"
-       d="m 165.06629,148.78034 v 18.24114 h 22.225 v 18.24114"
-       id="path17006"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccc" />
-    <path
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker18230)"
-       d="m 200.06287,148.78034 v 18.24114 h 60.32972 v 18.24114"
-       id="path17008"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccc" />
-    <path
        inkscape:connector-curvature="0"
        id="path17012"
        d="m 183.80978,148.64805 h 31.95471 v -0.068"
@@ -1120,17 +1117,16 @@
          x="341.97659"
          sodipodi:role="line" /></text>
     <text
-       transform="translate(-119.64388,41.318881)"
        id="text17020"
-       y="152.97946"
-       x="124.05683"
+       y="194.29834"
+       x="4.5452261"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444447px;line-height:3.17499995px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:-0.2619375px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Hack;-inkscape-font-specification:Hack;letter-spacing:-0.26458332px;word-spacing:-0.26458332px;stroke-width:0.26458332px"
-         y="152.97946"
-         x="124.05683"
+         y="194.29834"
+         x="4.5452261"
          id="tspan17018"
-         sodipodi:role="line">sftrack(coords = &lt;df[, c(&lt;x&gt;, &lt;y&gt;, &lt;z&gt;)]&gt;, timestamp = &lt;POSIXt&gt;, burst = list(&lt;vectors&gt;))</tspan></text>
+         sodipodi:role="line">sftrack(data = NULL, coords = &lt;df[, c(&lt;x&gt;, &lt;y&gt;, &lt;z&gt;)]&gt;, timestamp = &lt;POSIXt&gt;, burst = list(&lt;vectors&gt;))</tspan></text>
     <g
        id="g17166"
        transform="translate(10.583333)">
@@ -1296,9 +1292,27 @@
    id="tspan19345">independent </tspan>vector<tspan
    id="tspan17174"
    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px">s</tspan></tspan></text>
+    <path
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker5319)"
+       d="m 124.29196,148.78034 v 18.24114 0 18.24114"
+       id="path5311"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker15330)"
+       d="m 165.45302,148.78034 v 18.24114 h 61.9125 v 18.24114"
+       id="path5313"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker16260)"
+       d="m 200.06287,148.78034 v 12.94947 h 100.01722 v 23.53281"
+       id="path5315"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
   </g>
   <g
-     style="display:none"
+     style="display:inline"
      inkscape:label="df"
      id="g11373"
      inkscape:groupmode="layer"
@@ -1761,22 +1775,21 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc" />
     <text
-       transform="translate(-4.3670993e-6)"
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444447px;line-height:6.3499999px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="31.408175"
+       x="40.542492"
        y="104.18139"
        id="text23406"><tspan
          sodipodi:role="line"
-         x="31.408175"
+         x="40.542492"
          y="104.18139"
          style="font-size:4.23333311px;line-height:6.3499999px;text-align:start;text-anchor:start;stroke-width:0.26458332px"
          id="tspan23400">Class <tspan
    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Hack;-inkscape-font-specification:Hack;letter-spacing:-0.26458332px;word-spacing:-0.26458332px"
-   id="tspan23398">(&quot;sf&quot;, [&quot;tbl_df&quot;], </tspan></tspan><tspan
+   id="tspan23398">([&quot;tbl_df&quot;], </tspan></tspan><tspan
          id="tspan23404"
          sodipodi:role="line"
-         x="31.408175"
+         x="40.542492"
          y="110.9882"
          style="font-size:4.23333311px;line-height:6.3499999px;text-align:start;text-anchor:start;stroke-width:0.26458332px"><tspan
            id="tspan23402"
@@ -2138,7 +2151,7 @@
      inkscape:groupmode="layer"
      id="layer1"
      inkscape:label="sf-df"
-     style="display:inline"
+     style="display:none"
      transform="translate(4.3670993e-6)">
     <rect
        style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#767676;stroke-width:0.30000004;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
